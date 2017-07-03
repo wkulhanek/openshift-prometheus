@@ -1,0 +1,139 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: prometheus
+  annotations:
+    "openshift.io/display-name": Prometheus
+    description: |
+      A monitoring solution for an OpenShift cluster - collect and gather metrics from nodes, services, and the infrastructure.
+    iconClass: icon-cogs
+    tags: "monitoring,prometheus,time-series"
+parameters:
+- description: The namespace to instantiate prometheus under. Defaults to 'kube-system'.
+  name: NAMESPACE
+  value: kube-system
+- description: The location of the prometheus image
+  name: IMAGE_PROMETHEUS
+  value: registry.svc.ci.openshift.org/ci/prometheus:latest
+objects:
+
+# Authorize the prometheus service account to read data about the cluster
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: prometheus
+    namespace: "${NAMESPACE}"
+
+- apiVersion: v1
+  kind: ClusterRoleBinding
+  metadata:
+    name: prometheus-cluster-reader
+  roleRef:
+    name: cluster-reader
+  subjects:
+  - kind: ServiceAccount
+    name: prometheus
+    namespace: "${NAMESPACE}"
+
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: prometheus
+    namespace: "${NAMESPACE}"
+  spec:
+    to:
+      name: prometheus
+
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      prometheus.io/scrape: "true"
+    labels:
+      name: prometheus
+    name: prometheus
+    namespace: "${NAMESPACE}"
+  spec:
+    ports:
+    - name: prometheus
+      port: 9090
+      protocol: TCP
+      targetPort: 9090
+    selector:
+      app: prometheus
+
+# Deploy Prometheus
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    labels:
+      app: prometheus
+    name: prometheus
+    namespace: "${NAMESPACE}"
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: prometheus
+    template:
+      metadata:
+        labels:
+          app: prometheus
+        name: prometheus
+      spec:
+        serviceAccountName: prometheus
+        containers:
+        - name: prometheus
+          args:
+          - --storage.tsdb.retention=6h
+          - --config.file=/etc/prometheus/prometheus.yml
+          - --web.listen-address=:9090
+          image: ${IMAGE_PROMETHEUS}
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - mountPath: /etc/prometheus
+            name: config-volume
+          - mountPath: /prometheus
+            name: data-volume
+        restartPolicy: Always
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: prometheus
+          name: config-volume
+        - emptyDir: {}
+          name: data-volume
+
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: prometheus
+  data:
+    prometheus.yml: |
+      global:
+          scrape_interval: 30s
+          scrape_timeout: 30s
+      scrape_configs:
+        - job_name: kubernetes-nodes-cadvisor
+          scrape_interval: 10s
+          scrape_timeout: 10s
+          scheme: https  # remove if you want to scrape metrics on insecure port
+          tls_config:
+            ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+          kubernetes_sd_configs:
+            - role: node
+          relabel_configs:
+            - action: labelmap
+              regex: __meta_kubernetes_node_label_(.+)
+          metric_relabel_configs:
+            - action: replace
+              source_labels: [id]
+              regex: '^/machine\.slice/machine-rkt\\x2d([^\\]+)\\.+/([^/]+)\.service$'
+              target_label: rkt_container_name
+              replacement: '${2}-${1}'
+            - action: replace
+              source_labels: [id]
+              regex: '^/system\.slice/(.+)\.service$'
+              target_label: systemd_service_name
+              replacement: '${1}'

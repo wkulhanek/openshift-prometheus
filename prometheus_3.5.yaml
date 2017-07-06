@@ -114,6 +114,22 @@ objects:
           scrape_interval: 30s
           scrape_timeout: 30s
       scrape_configs:
+        # Monitor itself
+        - job_name: 'prometheus'
+          static_configs:
+            - targets:
+              - 'localhost:9090'
+        # Monitor all OpenShift Nodes. Add an entry under target for each node
+        # Each node needs to run a node-exporter (preferably from a DaemonSet)
+        - job_name: node
+          scrape_interval: 15s
+          static_configs:
+            - targets:
+              - 'node1.mon.internal:9100'
+              - 'node2.mon.internal:9100'
+              - 'infranode1.mon.internal:9100'
+              - 'master1.mon.internal:9100'
+        # Monitor Kubernetes/OpenShift. Auto discovered.
         - job_name: kubernetes-nodes-cadvisor
           scrape_interval: 10s
           scrape_timeout: 10s

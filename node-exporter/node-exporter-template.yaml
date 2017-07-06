@@ -46,6 +46,13 @@ objects:
             name: scrape
           securityContext:
             privileged: true
+          args:
+            - -collector.procfs
+            - /host/proc
+            - -collector.sysfs
+            - /host/sys
+            - -collector.filesystem.ignored-mount-points
+            - '"^/(sys|proc|dev|host|etc)($|/)"'
           volumeMounts:
             - name: dev
               mountPath: /host/dev

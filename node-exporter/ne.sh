@@ -1,7 +1,11 @@
 #!/bin/sh
+# Create a new project - recommended because of the Node Selector
+# that needs to be set
 oc new-project exporter --display-name="Monitoring - Node Exporter"
 oc create -f node-exporter-template.yaml
 oc new-app node-exporter -p NAMESPACE=exporter
+
+# The Service Account running the node selector pods needs the SCC `hostaccess`:
 oc adm policy add-scc-to-user hostaccess system:serviceaccount:exporter:default
 
 # Next line is necessary to place pods not just on worker nodes but also

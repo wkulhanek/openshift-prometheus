@@ -1,0 +1,41 @@
+= OpenShift Prometheus Node Exporter
+
+The Node Exporter should run on every single OpenShift node that is to be monitored. It collects the metrics from the host itself.
+
+* To set up use the following commands (or modify the included shell script):
++
+[source,bash]
+----
+# Create a new project - recommended because of the Node Selector
+# that needs to be set
+oc new-project exporter --display-name="Monitoring - Node Exporter"
+oc create -f node-exporter-template.yaml
+oc new-app node-exporter -p NAMESPACE=exporter
+
+# The Service Account running the node selector pods needs the SCC `hostaccess`:
+oc adm policy add-scc-to-user hostaccess system:serviceaccount:exporter:default
+
+# Next line is necessary to place pods not just on worker nodes but also
+# on Infranodes and Masters
+# If there are still pods with a "MatchNodeSelector" error simply delete them
+# and they will be recreated successfully
+oc annotate namespace exporter openshift.io/node-selector=monitoring=true
+
+# Now label all nodes with the right label for the DaemonSet to place
+# a node-exporter pod on each node
+oc label node node1.mon.internal monitoring-true
+oc label node node2.mon.internal monitoring-true
+oc label node infranode1.mon.internal monitoring-true
+oc label node master1.mon.internal monitoring-true
+----
++
+* Make sure to open the firewall for port 9100 on every node that is to be monitored - otherwise the Prometheus pod will not be able to connect to the node exporter nodes listening on a host port:
+
+** Add the following line to /etc/sysconfig/iptables:
++
+[source,text]
+----
+-A OS_FIREWALL_ALLOW -p tcp -m state --state NEW -m tcp --dport 9100 -j ACCEPT
+----
+
+* Then restart IPTables using `systemctl restart iptables`

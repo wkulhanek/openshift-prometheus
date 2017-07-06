@@ -1,0 +1,17 @@
+= OpenShift Prometheus Alert Manager
+
+The Alert Manager will be connected to Prometheus and send alerts when specific rules are hit.
+
+TBD: more documentation
+
+* To set up use the following commands (or modify the included shell script):
++
+[source,bash]
+----
+# Create a new project
+oc new-project alertmanager --display-name="Monitoring - Alert Manager"
+oc create -f alertmanager.yaml
+oc new-app alertmanager -p NAMESPACE=alertmanager -p VOLUME_CAPACITY=4Gi
+----
++
+* TBD: Need a good config.yml file for default alerts for OpenShift.

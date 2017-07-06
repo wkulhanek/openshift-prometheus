@@ -15,6 +15,12 @@ parameters:
 - description: The location of the prometheus image
   name: IMAGE_PROMETHEUS
   value: registry.svc.ci.openshift.org/ci/prometheus:latest
+- name: VOLUME_CAPACITY
+  displayName: Volume Capacity
+  description: Volume space available for data, e.g. 512Mi, 2Gi.
+  value: 4Gi
+  required: true
+
 objects:
 
 # Authorize the prometheus service account to read data about the cluster
@@ -101,8 +107,22 @@ objects:
             defaultMode: 420
             name: prometheus
           name: config-volume
-        - emptyDir: {}
-          name: data-volume
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: prometheus-data-pvc
+
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: prometheus-data-pvc
+    namespace: "${NAMESPACE}"
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: "${VOLUME_CAPACITY}"
+
 
 - apiVersion: v1
   kind: ConfigMap

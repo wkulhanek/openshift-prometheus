@@ -8,7 +8,7 @@ Do deploy:
 ----
 oc new-project prometheus --display-name="Monitoring - Prometheus"
 oc create -f prometheus_3.5.yaml
-oc new-app prometheus -p NAMESPACE=prometheus
+oc new-app prometheus -p NAMESPACE=prometheus -p VOLUME_CAPACITY=4Gi
 ----
 
 See https://github.com/wkulhanek/docker-openshift-grafana for a template/Dockerfile to deploy Grafana alongside Prometheus.

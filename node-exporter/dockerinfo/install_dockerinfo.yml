@@ -1,0 +1,27 @@
+---
+- hosts: nodes
+  remote_user: ec2_user
+  become: yes
+  become_user: root
+  tasks:
+  - name: Create textfile_collector directory
+    file:
+      path:    /var/lib/node_exporter/textfile_collector
+      state:   directory 
+      owner:   root
+      group:   root
+      mode:    0775
+  - name: Copy dockerinfo to node
+    copy:
+      src:   dockerinfo.sh
+      dest:  /usr/local/bin/dockerinfo.sh
+      owner: root
+      group: root
+      mode:  0755
+  - name: Copy cron.d/docker_info.cron to node
+    copy:
+      src:   docker_info.cron
+      dest:  /etc/cron.d/docker_info.cron
+      owner: root
+      group: root
+      mode:  0644 

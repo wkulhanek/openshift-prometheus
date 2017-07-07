@@ -53,6 +53,8 @@ objects:
             - /host/sys
             - -collector.filesystem.ignored-mount-points
             - '"^/(sys|proc|dev|host|etc)($|/)"'
+            - -collector.textfile.directory
+            - /textfile_collector
           volumeMounts:
             - name: dev
               mountPath: /host/dev
@@ -62,6 +64,8 @@ objects:
               mountPath: /host/sys
             - name: rootfs
               mountPath: /rootfs
+            - name: textfile_collector
+              mountPath: /textfile_collector
         volumes:
           - name: proc
             hostPath:
@@ -75,3 +79,6 @@ objects:
           - name: rootfs
             hostPath:
               path: /
+          - name: textfile_collector
+            hostPath:
+              path: /var/lib/node_exporter/textfile_collector

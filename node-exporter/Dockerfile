@@ -7,7 +7,8 @@ RUN curl -L -o /tmp/node_exporter.tar.gz https://github.com/prometheus/node_expo
     tar -xzf /tmp/node_exporter.tar.gz && \
     mv ./node_exporter-$NODE_EXPORTER_VERSION.linux-amd64/node_exporter /bin && \
     rm -rf ./node_exporter-$NODE_EXPORTER_VERSION.linux-amd64 && \
-    rm /tmp/node_exporter.tar.gz
+    rm /tmp/node_exporter.tar.gz && \
+    mkdir /textfile_collector
 
 EXPOSE      9100
 USER        nobody

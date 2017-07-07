@@ -85,7 +85,15 @@
               "step": 40
             }
           ],
-          "thresholds": [],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 80
+            }
+          ],
           "timeFrom": null,
           "timeShift": null,
           "title": "Docker Volume % Used",
@@ -99,7 +107,7 @@
             "buckets": null,
             "mode": "series",
             "name": null,
-            "show": true,
+            "show": false,
             "values": [
               "current"
             ]
@@ -107,10 +115,10 @@
           "yaxes": [
             {
               "format": "percent",
-              "label": null,
+              "label": "",
               "logBase": 1,
-              "max": null,
-              "min": null,
+              "max": "100",
+              "min": "0",
               "show": true
             },
             {
@@ -119,7 +127,7 @@
               "logBase": 1,
               "max": null,
               "min": null,
-              "show": true
+              "show": false
             }
           ]
         },
@@ -162,7 +170,15 @@
               "step": 40
             }
           ],
-          "thresholds": [],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 80
+            }
+          ],
           "timeFrom": null,
           "timeShift": null,
           "title": "Root Filesystem % Used",
@@ -176,7 +192,7 @@
             "buckets": null,
             "mode": "series",
             "name": null,
-            "show": true,
+            "show": false,
             "values": [
               "current"
             ]
@@ -184,10 +200,10 @@
           "yaxes": [
             {
               "format": "percent",
-              "label": null,
+              "label": "",
               "logBase": 1,
-              "max": null,
-              "min": null,
+              "max": "100",
+              "min": "0",
               "show": true
             },
             {
@@ -196,7 +212,7 @@
               "logBase": 1,
               "max": null,
               "min": null,
-              "show": true
+              "show": false
             }
           ]
         }
@@ -309,13 +325,14 @@
           "datasource": "${DS_DS-PROMETHEUS}",
           "description": "Space Available in Docker Volume in Bytes",
           "fill": 1,
+          "hideTimeOverride": false,
           "id": 1,
           "legend": {
             "avg": false,
             "current": false,
             "max": false,
             "min": false,
-            "show": true,
+            "show": false,
             "total": false,
             "values": false
           },
@@ -336,18 +353,18 @@
             {
               "expr": "node_docker_volume_available_bytes{instance !~ \"^master.*\"}",
               "format": "time_series",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "",
               "refId": "A",
-              "step": 20
+              "step": 10
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
+          "timeFrom": "1h",
           "timeShift": null,
           "title": "Docker Volume Available (Bytes)",
           "tooltip": {
-            "shared": true,
+            "shared": false,
             "sort": 0,
             "value_type": "individual"
           },
@@ -357,7 +374,9 @@
             "mode": "time",
             "name": null,
             "show": true,
-            "values": []
+            "values": [
+              "current"
+            ]
           },
           "yaxes": [
             {
@@ -374,7 +393,7 @@
               "logBase": 1,
               "max": null,
               "min": null,
-              "show": true
+              "show": false
             }
           ]
         }
@@ -424,5 +443,5 @@
   },
   "timezone": "browser",
   "title": "Docker Status",
-  "version": 5
+  "version": 7
 }

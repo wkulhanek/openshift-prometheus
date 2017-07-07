@@ -32,6 +32,7 @@
   "annotations": {
     "list": []
   },
+  "description": "Displays status of Docker Service on Nodes",
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
@@ -42,7 +43,7 @@
   "rows": [
     {
       "collapse": false,
-      "height": 325,
+      "height": 328,
       "panels": [
         {
           "aliasColors": {},
@@ -72,22 +73,99 @@
           "renderer": "flot",
           "seriesOverrides": [],
           "spaceLength": 10,
-          "span": 12,
+          "span": 6,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "(node_docker_volume_available_bytes{instance !~ \"^master1.*\"}/node_docker_volume_size_bytes{instance !~ \"^master1.*\"})*100",
+              "expr": "(node_docker_volume_used_bytes{instance !~ \"^master1.*\"}/node_docker_volume_size_bytes{instance !~ \"^master1.*\"})*100",
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
-              "step": 20
+              "step": 40
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "Docker Volume % Used",
+          "tooltip": {
+            "shared": false,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "series",
+            "name": null,
+            "show": true,
+            "values": [
+              "current"
+            ]
+          },
+          "yaxes": [
+            {
+              "format": "percent",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": true,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_DS-PROMETHEUS}",
+          "fill": 1,
+          "id": 5,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": false,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "((node_filesystem_size{mountpoint=\"/rootfs\"}-node_filesystem_avail{mountpoint=\"/rootfs\"}) / node_filesystem_size{mountpoint=\"/rootfs\"} ) * 100",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "refId": "A",
+              "step": 40
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Root Filesystem % Used",
           "tooltip": {
             "shared": false,
             "sort": 0,
@@ -172,7 +250,7 @@
               "hide": false,
               "intervalFactor": 2,
               "refId": "A",
-              "step": 10
+              "step": 20
             }
           ],
           "thresholds": [],
@@ -261,7 +339,7 @@
               "intervalFactor": 2,
               "legendFormat": "",
               "refId": "A",
-              "step": 10
+              "step": 20
             }
           ],
           "thresholds": [],
@@ -316,8 +394,8 @@
     "list": []
   },
   "time": {
-    "from": "2017-07-07T18:47:40.000Z",
-    "to": "2017-07-07T20:47:40.872Z"
+    "from": "2017-07-07T17:47:39.564Z",
+    "to": "2017-07-07T21:47:41.308Z"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -344,7 +422,7 @@
       "30d"
     ]
   },
-  "timezone": "",
+  "timezone": "browser",
   "title": "Docker Status",
-  "version": 2
+  "version": 5
 }

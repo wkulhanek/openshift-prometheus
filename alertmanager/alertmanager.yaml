@@ -9,9 +9,6 @@ metadata:
     iconClass: icon-cogs
     tags: "monitoring,prometheus,alertmanager,time-series"
 parameters:
-- description: The namespace to instantiate alertmanager under. Defaults to 'kube-system'.
-  name: NAMESPACE
-  value: kube-system
 - description: The location of the prometheus image
   name: IMAGE_ALERTMANAGER
   value: wkulhanek/alertmanager:latest
@@ -26,7 +23,6 @@ objects:
   kind: Route
   metadata:
     name: alertmanager
-    namespace: "${NAMESPACE}"
   spec:
     to:
       name: alertmanager
@@ -39,7 +35,6 @@ objects:
     labels:
       name: alertmanager
     name: alertmanager
-    namespace: "${NAMESPACE}"
   spec:
     ports:
     - name: alertmanager
@@ -56,7 +51,6 @@ objects:
     labels:
       app: alertmanager
     name: alertmanager
-    namespace: "${NAMESPACE}"
   spec:
     replicas: 1
     selector:
@@ -92,7 +86,6 @@ objects:
   kind: PersistentVolumeClaim
   metadata:
     name: alertmanager-data-pvc
-    namespace: "${NAMESPACE}"
   spec:
     accessModes:
     - ReadWriteMany

@@ -1,44 +1,37 @@
-= OpenShift Prometheus Node Exporter
+# OpenShift Prometheus Node Exporter
 
-The Node Exporter should run on every single OpenShift node that is to be monitored. It collects the metrics from the host itself.
+The Node Exporter provides OS and system level metrics for Prometheus. The exporter runs as a link:https://docs.openshift.com/container-platform/latest/dev_guide/daemonsets.html[DaemonSet] to guarantee each node runs at least one copy of the application.
 
-* To set up use the following commands (or modify the included shell script):
-+
+## Deployment to OpenShift
+
+To deploy the node-exporter to OpenShift, complete the following steps.
+
+### Open Firewall Ports
+
+Port 9100 needs to be opened on each OpenShift host in order for the Prometheus server to scrape the metrics. Execute the following command to allow traffic to this port.
+
 [source,bash]
 ----
-# Create a new project - recommended because of the Node Selector
-# that needs to be set
-oc new-project exporter --display-name="Monitoring - Node Exporter"
+iptables -A OS_FIREWALL_ALLOW -p tcp -m state --state NEW -m tcp --dport 9100 -j ACCEPT
+iptables-save
+----
 
-# Next line is necessary to place pods not just on worker nodes but also
-# on Infranodes and Masters
-# If some pods don't start with a "MatchNodeSelector" error simply delete them
-# and they will be recreated successfully
-oc annotate namespace exporter openshift.io/node-selector=monitoring=true
+### Elevated Access
 
-# The Service Account running the node selector pods needs the SCC `hostaccess`:
-oc adm policy add-scc-to-user hostaccess system:serviceaccount:exporter:default
+Since the node exporter will be accessing resources from each host, the service account being used to run the pod must be granted elevated access. Execute the following command to add the _default_ Service Account in the _prometheus_ project to the _privileged_ SCC>
 
-# Label all nodes with the right label for the DaemonSet to place
-# a node-exporter pod on each node
-# Obviously replace these node DNS names with your configuration
-oc label node node1.mon.internal      monitoring=true
-oc label node node2.mon.internal      monitoring=true
-oc label node infranode1.mon.internal monitoring=true
-oc label node master1.mon.internal    monitoring=true
+[source,bash]
+----
+oc adm policy add-scc-to-user privileged system:serviceaccount:prometheus:default
+----
 
-# Import the template and create the DaemonSet
+### Instantiate the Template
+
+Execute the following command to add and instantiate the node-exporter template
+
+[source,bash]
+----
 oc create -f node-exporter-template.yaml
-oc new-app node-exporter -p NAMESPACE=exporter
-----
-+
-* Make sure to open the firewall for port 9100 on every node that is to be monitored - otherwise the Prometheus pod will not be able to connect to the node exporter nodes listening on a host port:
-
-** Add the following line to /etc/sysconfig/iptables:
-+
-[source,text]
-----
--A OS_FIREWALL_ALLOW -p tcp -m state --state NEW -m tcp --dport 9100 -j ACCEPT
+oc new-app --template=node-exporter
 ----
 
-* Then restart IP Tables using `systemctl restart iptables`

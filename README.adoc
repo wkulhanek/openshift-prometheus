@@ -19,18 +19,20 @@ Execute the following command to create the project:
 [source,bash]
 ----
 oc new-project prometheus --display-name="Prometheus"
----
+----
 
 ## Deploy Prometheus
 
-An OpenShift template has been provided to streamline the deployment to OpenShift. The template configures a PersistentVolme based on a specified size.
+An OpenShift template has been provided to streamline the deployment to OpenShift.
+
+Because of a bug in the current Prometheus 2.0.0 alpha 2 image there is no persistent volume available at the moment. This will be updated once Prometheus 2.0 ships.
 
 Execute the following command to add the template to the project and instantiate the template:
 
 [source,bash]
 ----
 oc create -f prometheus_3.5.yaml
-oc new-app --template=prometheus -p VOLUME_CAPACITY=4Gi
+oc new-app --template=prometheus
 ----
 
 ## Next Steps

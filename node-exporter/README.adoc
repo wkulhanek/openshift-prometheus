@@ -8,7 +8,7 @@ To deploy the node-exporter to OpenShift, complete the following steps.
 
 ### Open Firewall Ports
 
-Port 9100 needs to be opened on each OpenShift host in order for the Prometheus server to scrape the metrics. 
+Port 9100 needs to be opened on each OpenShift host in order for the Prometheus server to scrape the metrics.
 
 Add the following line to `/etc/sysconfig/iptables`:
 
@@ -23,7 +23,7 @@ NOTE: The following commands will cause all running containers on the node to st
 
 [source,bash]
 ----
-systemctl reload iptables
+systemctl reload  iptables
 systemctl restart iptables.service
 systemctl restart docker
 systemctl restart atomic-openshift-node.service
@@ -31,7 +31,7 @@ systemctl restart atomic-openshift-node.service
 
 ### Elevated Access
 
-Since the node exporter will be accessing resources from each host, the service account being used to run the pod must be granted elevated access. Execute the following command to add the _default_ Service Account in the _prometheus_ project to the _privileged_ SCC>
+Since the node exporter will be accessing resources from each host, the service account being used to run the pod must be granted elevated access. Execute the following command to add the _default_ Service Account in the _prometheus_ project to the _privileged_ SCC:
 
 [source,bash]
 ----
@@ -47,4 +47,3 @@ Execute the following command to add and instantiate the node-exporter template
 oc create -f node-exporter-template.yaml
 oc new-app --template=node-exporter
 ----
-

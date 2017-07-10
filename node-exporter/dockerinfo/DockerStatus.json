@@ -39,7 +39,7 @@
   "hideControls": false,
   "id": null,
   "links": [],
-  "refresh": false,
+  "refresh": "10s",
   "rows": [
     {
       "collapse": false,
@@ -82,7 +82,7 @@
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
-              "step": 40
+              "step": 30
             }
           ],
           "thresholds": [
@@ -167,7 +167,7 @@
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
-              "step": 40
+              "step": 30
             }
           ],
           "thresholds": [
@@ -220,7 +220,7 @@
       "repeat": null,
       "repeatIteration": null,
       "repeatRowId": null,
-      "showTitle": false,
+      "showTitle": true,
       "title": "Docker Volume Availabe",
       "titleSize": "h4"
     },
@@ -238,6 +238,7 @@
           "fill": 1,
           "id": 2,
           "legend": {
+            "alignAsTable": true,
             "avg": false,
             "current": false,
             "max": false,
@@ -246,13 +247,13 @@
             "total": false,
             "values": false
           },
-          "lines": false,
-          "linewidth": 1,
+          "lines": true,
+          "linewidth": 2,
           "links": [],
           "nullPointMode": "null",
           "percentage": false,
           "pointradius": 5,
-          "points": true,
+          "points": false,
           "renderer": "flot",
           "seriesOverrides": [],
           "spaceLength": 10,
@@ -265,6 +266,7 @@
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
+              "legendFormat": "",
               "refId": "A",
               "step": 20
             }
@@ -274,7 +276,7 @@
           "timeShift": null,
           "title": "Docker Volume Used (Bytes)",
           "tooltip": {
-            "shared": true,
+            "shared": false,
             "sort": 0,
             "value_type": "individual"
           },
@@ -284,11 +286,13 @@
             "mode": "time",
             "name": null,
             "show": true,
-            "values": []
+            "values": [
+              "total"
+            ]
           },
           "yaxes": [
             {
-              "format": "decbytes",
+              "format": "bytes",
               "label": "",
               "logBase": 1,
               "max": null,
@@ -301,7 +305,7 @@
               "logBase": 1,
               "max": null,
               "min": null,
-              "show": true
+              "show": false
             }
           ]
         }
@@ -328,21 +332,22 @@
           "hideTimeOverride": false,
           "id": 1,
           "legend": {
+            "alignAsTable": true,
             "avg": false,
             "current": false,
             "max": false,
             "min": false,
-            "show": false,
+            "show": true,
             "total": false,
             "values": false
           },
-          "lines": false,
-          "linewidth": 1,
+          "lines": true,
+          "linewidth": 2,
           "links": [],
           "nullPointMode": "null",
           "percentage": false,
           "pointradius": 5,
-          "points": true,
+          "points": false,
           "renderer": "flot",
           "seriesOverrides": [],
           "spaceLength": 10,
@@ -356,7 +361,7 @@
               "intervalFactor": 1,
               "legendFormat": "",
               "refId": "A",
-              "step": 10
+              "step": 2
             }
           ],
           "thresholds": [],
@@ -413,8 +418,8 @@
     "list": []
   },
   "time": {
-    "from": "2017-07-07T17:47:39.564Z",
-    "to": "2017-07-07T21:47:41.308Z"
+    "from": "now-3h",
+    "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -443,5 +448,5 @@
   },
   "timezone": "browser",
   "title": "Docker Status",
-  "version": 7
+  "version": 8
 }

@@ -9,9 +9,6 @@ metadata:
     iconClass: icon-cogs
     tags: "monitoring,node-exporter,time-series"
 parameters:
-- description: The namespace to instantiate prometheus under. Defaults to 'kube-system'.
-  name: NAMESPACE
-  value: kube-system
 - description: The location of the prometheus image
   name: IMAGE_NODE_EXPORTER
   value: wkulhanek/node-exporter:latest
@@ -31,8 +28,6 @@ objects:
           prometheus.io/scrape: "true"
           prometheus.io/port: "9100"
       spec:
-        nodeSelector:
-          monitoring: "true"
         hostPID: true
         hostNetwork: true
         containers:

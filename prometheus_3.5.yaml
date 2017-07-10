@@ -12,12 +12,7 @@ parameters:
 - description: The location of the prometheus image
   name: IMAGE_PROMETHEUS
   value: registry.svc.ci.openshift.org/ci/prometheus:latest
-- name: VOLUME_CAPACITY
-  displayName: Volume Capacity
-  description: Volume space available for data, e.g. 512Mi, 2Gi.
-  value: 8Gi
-  required: true
-- description: The namespace to instantiate prometheus under. Defaults to 'kube-system'.
+- description: The namespace to instantiate prometheus under. Defaults to 'prometheus'.
   name: NAMESPACE
   value: prometheus
 objects:
@@ -98,18 +93,7 @@ objects:
             name: prometheus
           name: config-volume
         - name: data-volume
-          persistentVolumeClaim:
-            claimName: prometheus-data-pvc
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    name: prometheus-data-pvc
-  spec:
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: "${VOLUME_CAPACITY}"
+          emptyDir: {}
 - apiVersion: v1
   kind: ConfigMap
   metadata:

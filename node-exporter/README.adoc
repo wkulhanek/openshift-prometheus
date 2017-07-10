@@ -8,12 +8,25 @@ To deploy the node-exporter to OpenShift, complete the following steps.
 
 ### Open Firewall Ports
 
-Port 9100 needs to be opened on each OpenShift host in order for the Prometheus server to scrape the metrics. Execute the following command to allow traffic to this port.
+Port 9100 needs to be opened on each OpenShift host in order for the Prometheus server to scrape the metrics. 
+
+Add the following line to `/etc/sysconfig/iptables`:
 
 [source,bash]
 ----
-iptables -A OS_FIREWALL_ALLOW -p tcp -m state --state NEW -m tcp --dport 9100 -j ACCEPT
-iptables-save
+-A OS_FIREWALL_ALLOW -p tcp -m state --state NEW -m tcp --dport 9100 -j ACCEPT
+----
+
+Restart _iptables_ and OpenShift services in order to properly rebuild the rules
+
+NOTE: The following commands will cause all running containers on the node to stop and restart
+
+[source,bash]
+----
+systemctl reload iptables
+systemctl restart iptables.service
+systemctl restart docker
+systemctl restart atomic-openshift-node.service
 ----
 
 ### Elevated Access

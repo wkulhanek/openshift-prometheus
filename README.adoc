@@ -42,3 +42,13 @@ Please refer to the following to enhance the functionality of Prometheus
 * link:Alertmanager[alertmanager]
 * link:node-exporter[node-exporter]
 * link:https://github.com/wkulhanek/docker-openshift-grafana[Grafana]
+
+# Cleanup
+
+Simply delete the project and the cluster-reader binding (which gets created by the template but doesn't get deleted as part of the project):
+
+[source,bash]
+----
+oc delete project prometheus
+co delete clusterrolebinding prometheus-cluster-reader
+----

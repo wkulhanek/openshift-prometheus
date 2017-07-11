@@ -50,5 +50,5 @@ Simply delete the project and the cluster-reader binding (which gets created by 
 [source,bash]
 ----
 oc delete project prometheus
-co delete clusterrolebinding prometheus-cluster-reader
+oc delete clusterrolebinding prometheus-cluster-reader
 ----

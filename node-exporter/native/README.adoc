@@ -1,0 +1,10 @@
+# Installing node-exporter natively on an OpenShift Cluster
+
+If you would like to run node-exporter natively on your OpenShift cluster you can use the playbook to deploy it to all the nodes in your cluster.
+
+Simply point to the Ansible hosts file on your OpenShift bastion host and run the attached playbook. This will install the `node_exporter` binary in all hosts that are in the `nodes` group in the referenced hosts file. It will also set up a system service to automatically start the node_exporter.
+
+[source,bash]
+----
+ansible-playbook -i /etc/ansible/hosts install_node-exporter.yml
+----

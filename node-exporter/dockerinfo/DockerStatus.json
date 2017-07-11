@@ -27,6 +27,18 @@
       "id": "prometheus",
       "name": "Prometheus",
       "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "singlestat",
+      "name": "Singlestat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
     }
   ],
   "annotations": {
@@ -81,6 +93,7 @@
               "expr": "(node_docker_volume_used_bytes{instance !~ \"^master1.*\"}/node_docker_volume_size_bytes{instance !~ \"^master1.*\"})*100",
               "format": "time_series",
               "intervalFactor": 2,
+              "legendFormat": "",
               "refId": "A",
               "step": 30
             }
@@ -163,7 +176,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "((node_filesystem_size{mountpoint=\"/rootfs\"}-node_filesystem_avail{mountpoint=\"/rootfs\"}) / node_filesystem_size{mountpoint=\"/rootfs\"} ) * 100",
+              "expr": "((node_filesystem_size{mountpoint=\"/\", device=\"rootfs\"}-node_filesystem_avail{mountpoint=\"/\", device=\"rootfs\"}) / node_filesystem_size{mountpoint=\"/\", device=\"rootfs\"} ) * 100",
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
@@ -385,7 +398,7 @@
           },
           "yaxes": [
             {
-              "format": "decbytes",
+              "format": "bytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -401,6 +414,171 @@
               "show": false
             }
           ]
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": false,
+      "title": "Dashboard Row",
+      "titleSize": "h6"
+    },
+    {
+      "collapse": false,
+      "height": 250,
+      "panels": [
+        {
+          "columns": [],
+          "fontSize": "100%",
+          "id": 6,
+          "links": [],
+          "pageSize": null,
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "span": 12,
+          "styles": [
+            {
+              "alias": "Time",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "alias": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "pattern": "",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            },
+            {
+              "alias": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "expr": "node_docker_volume_available_bytes{instance !~ \"^master.*\"}",
+              "format": "table",
+              "intervalFactor": 2,
+              "refId": "A",
+              "step": 20
+            }
+          ],
+          "title": "Docker Volume Available (Bytes)",
+          "transform": "table",
+          "type": "table"
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": false,
+      "title": "Dashboard Row",
+      "titleSize": "h6"
+    },
+    {
+      "collapse": false,
+      "height": 250,
+      "panels": [
+        {
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "datasource": "${DS_DS-PROMETHEUS}",
+          "format": "s",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "id": 7,
+          "interval": null,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+            {
+              "name": "value to text",
+              "value": 1
+            },
+            {
+              "name": "range to text",
+              "value": 2
+            }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+            {
+              "from": "null",
+              "text": "N/A",
+              "to": "null"
+            }
+          ],
+          "span": 12,
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": false
+          },
+          "tableColumn": "Time",
+          "targets": [
+            {
+              "expr": "day_of_month(v=vector( node_docker_last_successful_update) instant-vector )\n",
+              "format": "table",
+              "interval": "",
+              "intervalFactor": 2,
+              "metric": "node_docker_last_successful_update",
+              "refId": "A",
+              "step": 240
+            }
+          ],
+          "thresholds": "",
+          "title": "Last Successful Docker Update",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [
+            {
+              "op": "=",
+              "text": "N/A",
+              "value": "null"
+            }
+          ],
+          "valueName": "current"
         }
       ],
       "repeat": null,
@@ -448,5 +626,5 @@
   },
   "timezone": "browser",
   "title": "Docker Status",
-  "version": 8
+  "version": 10
 }

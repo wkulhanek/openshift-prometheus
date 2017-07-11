@@ -80,6 +80,26 @@ objects:
           - --config.file=/etc/prometheus/prometheus.yml
           - --web.listen-address=:9090
           image: ${IMAGE_PROMETHEUS}
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /status
+              port: 9090
+              scheme: HTTP
+            initialDelaySeconds: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /status
+              port: 9090
+              scheme: HTTP
+            initialDelaySeconds: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - mountPath: /etc/prometheus

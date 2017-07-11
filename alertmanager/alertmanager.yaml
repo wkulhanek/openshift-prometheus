@@ -72,7 +72,7 @@ objects:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: /status
+              path: /#/status
               port: 9093
               scheme: HTTP
             initialDelaySeconds: 2
@@ -82,7 +82,7 @@ objects:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /status
+              path: /#/status
               port: 9093
               scheme: HTTP
             initialDelaySeconds: 2

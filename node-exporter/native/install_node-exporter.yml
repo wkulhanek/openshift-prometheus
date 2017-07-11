@@ -1,0 +1,38 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Download latest node_exporter binary
+    get_url:
+      url: https://github.com/prometheus/node_exporter/releases/download/v0.14.0/node_exporter-0.14.0.linux-amd64.tar.gz
+      dest: /tmp/node_exporter.tgz
+  - name: Untar node_exporter binary
+    unarchive:
+      src: /tmp/node_exporter.tgz
+      dest: /tmp
+      copy: no
+- hosts: nodes
+  remote_user: ec2_user
+  become: yes
+  become_user: root
+  tasks:
+  - name: Copy node-exporter binary to node
+    copy:
+      src:   /tmp/node_exporter-0.14.0.linux-amd64/node_exporter
+      dest:  /usr/local/bin/node_exporter
+      owner: root
+      group: root
+      mode:  0755
+  - name: Set up Service for node-exporter
+    copy:
+      src:   node_exporter.conf
+      dest:  /etc/systemd/system/node_exporter.service
+      owner: root
+      group: root
+      mode:  0644
+  - name: Start node_exporter service on node
+    systemd:
+      name: node_exporter
+      enabled: yes
+      state: started
+      daemon_reload: yes
+

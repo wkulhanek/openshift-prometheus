@@ -36,3 +36,15 @@
       state: started
       daemon_reload: yes
 
+# Clean up on Localhost
+# Delete the downloaded and unarchived files
+- hosts: localhost
+  tasks:
+  - name: Cleanup localhost /tmp
+    file:
+      path: /tmp/node_exporter.tgz
+      state: absent
+  - name: Cleanup localhost unarchived directory
+    file:
+      path: /tmp/node_exporter-0.14.0.linux-amd64
+      state: absent

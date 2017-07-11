@@ -1,17 +1,17 @@
-= OpenShift Prometheus Alert Manager
+# OpenShift Prometheus Alert Manager
 
 The Alert Manager will be connected to Prometheus and send alerts when specific rules are hit.
 
-TBD: more documentation
+The example implementation makes use of a link:https://prometheus.io/docs/alerting/configuration/#<webhook_config>[webhook] to notify a target system.
 
-* To set up use the following commands (or modify the included shell script):
-+
+## Deployment to OpenShift
+
+Use the following steps to deploy Alertmanager to OpenShift
+
 [source,bash]
 ----
-# Create a new project
-oc new-project alertmanager --display-name="Monitoring - Alert Manager"
 oc create -f alertmanager.yaml
-oc new-app alertmanager -p NAMESPACE=alertmanager -p VOLUME_CAPACITY=4Gi
+oc new-app --template=alertmanager -p NAMESPACE=alertmanager -p VOLUME_CAPACITY=4Gi -p "WEBHOOK_URL=<insert_url>"
 ----
-+
-* TBD: Need a good config.yml file for default alerts for OpenShift.
+
+NOTE: Be sure to substitute the value of the Webhook URL when instantiating the template.

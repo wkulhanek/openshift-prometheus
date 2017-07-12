@@ -4,7 +4,7 @@
 lvs docker-vg --units b |grep docker-pool|awk -c '{print "node_docker_volume_size_bytes $4"}'         >/tmp/docker_info.prom
 lvs docker-vg --units b |grep docker-pool|awk -c '{print "node_docker_volume_data_percent_full $5"}' >>/tmp/docker_info.prom
 lvs docker-vg --units b |grep docker-pool|awk -c '{print "node_docker_volume_meta_percent_full $6"}' >>/tmp/docker_info.prom
-echo "{node_docker_running_containers " $(docker ps -q |wc -l) "}" >>/tmp/docker_info.prom
-echo "node_docker_last_successful_update `date +%s`" >>/tmp/docker_info.prom
+echo "{node_docker_running_containers " $(docker ps -q |wc -l) "}"                                   >>/tmp/docker_info.prom
+echo "node_docker_last_successful_update `date +%s`"                                                 >>/tmp/docker_info.prom
 
 mv /tmp/docker_info.prom /var/lib/node_exporter/textfile_collector

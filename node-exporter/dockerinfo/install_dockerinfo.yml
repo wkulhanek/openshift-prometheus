@@ -7,7 +7,7 @@
   - name: Create textfile_collector directory
     file:
       path:    /var/lib/node_exporter/textfile_collector
-      state:   directory 
+      state:   directory
       owner:   root
       group:   root
       mode:    0775
@@ -21,7 +21,7 @@
   - name: Copy cron.d/docker_info.cron to node
     copy:
       src:   docker_info.cron
-      dest:  /etc/cron.d/docker_info.cron
+      dest:  /etc/cron.d/dockerinfo.cron
       owner: root
       group: root
-      mode:  0644 
+      mode:  0644

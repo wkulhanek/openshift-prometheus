@@ -20,7 +20,7 @@
       mode:  0755
   - name: Copy cron.d/docker_info.cron to node
     copy:
-      src:   docker_info.cron
+      src:   dockerinfo.cron
       dest:  /etc/cron.d/dockerinfo.cron
       owner: root
       group: root

@@ -1,1 +1,1 @@
-*/5 * * * * root /usr/local/bin/dockerinfo.sh >>/var/log/dockerinfo.log
+*/1 * * * * root /usr/local/bin/dockerinfo.sh

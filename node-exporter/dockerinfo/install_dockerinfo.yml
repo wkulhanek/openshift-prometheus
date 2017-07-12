@@ -25,7 +25,7 @@
       owner: root
       group: root
       mode:  0644
-  - name: Start node_exporter service on node
+  - name: Restart crond service on node
     systemd:
       name: crond
       state: restarted

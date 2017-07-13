@@ -90,12 +90,13 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "(node_docker_volume_used_bytes{instance !~ \"^master1.*\"}/node_docker_volume_size_bytes{instance !~ \"^master1.*\"})*100",
+              "expr": "node_docker_volume_data_percent_full{instance !~ \"^master1.*\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "",
+              "metric": "node_docker_v",
               "refId": "A",
-              "step": 30
+              "step": 10
             }
           ],
           "thresholds": [
@@ -180,7 +181,7 @@
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
-              "step": 30
+              "step": 10
             }
           ],
           "thresholds": [
@@ -247,11 +248,9 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_DS-PROMETHEUS}",
-          "description": "Space Used in Docker Volume in Bytes",
-          "fill": 1,
-          "id": 2,
+          "fill": 0,
+          "id": 8,
           "legend": {
-            "alignAsTable": true,
             "avg": false,
             "current": false,
             "max": false,
@@ -261,7 +260,7 @@
             "values": false
           },
           "lines": true,
-          "linewidth": 2,
+          "linewidth": 3,
           "links": [],
           "nullPointMode": "null",
           "percentage": false,
@@ -270,26 +269,25 @@
           "renderer": "flot",
           "seriesOverrides": [],
           "spaceLength": 10,
-          "span": 12,
+          "span": 6,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "node_docker_volume_used_bytes{instance !~ \"^master.*\"}",
+              "expr": "node_docker_running_containers",
               "format": "time_series",
-              "hide": false,
               "intervalFactor": 2,
-              "legendFormat": "",
+              "metric": "node_docker_running_containers",
               "refId": "A",
-              "step": 20
+              "step": 10
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Docker Volume Used (Bytes)",
+          "title": "Docker Containers Running",
           "tooltip": {
-            "shared": false,
+            "shared": true,
             "sort": 0,
             "value_type": "individual"
           },
@@ -299,106 +297,11 @@
             "mode": "time",
             "name": null,
             "show": true,
-            "values": [
-              "total"
-            ]
+            "values": []
           },
           "yaxes": [
-            {
-              "format": "bytes",
-              "label": "",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
             {
               "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": false
-            }
-          ]
-        }
-      ],
-      "repeat": null,
-      "repeatIteration": null,
-      "repeatRowId": null,
-      "showTitle": false,
-      "title": "Dashboard Row",
-      "titleSize": "h6"
-    },
-    {
-      "collapse": false,
-      "height": 250,
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_DS-PROMETHEUS}",
-          "description": "Space Available in Docker Volume in Bytes",
-          "fill": 1,
-          "hideTimeOverride": false,
-          "id": 1,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "span": 12,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "node_docker_volume_available_bytes{instance !~ \"^master.*\"}",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "",
-              "refId": "A",
-              "step": 2
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": "1h",
-          "timeShift": null,
-          "title": "Docker Volume Available (Bytes)",
-          "tooltip": {
-            "shared": false,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [
-              "current"
-            ]
-          },
-          "yaxes": [
-            {
-              "format": "bytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -414,94 +317,7 @@
               "show": false
             }
           ]
-        }
-      ],
-      "repeat": null,
-      "repeatIteration": null,
-      "repeatRowId": null,
-      "showTitle": false,
-      "title": "Dashboard Row",
-      "titleSize": "h6"
-    },
-    {
-      "collapse": false,
-      "height": 250,
-      "panels": [
-        {
-          "columns": [],
-          "fontSize": "100%",
-          "id": 6,
-          "links": [],
-          "pageSize": null,
-          "scroll": true,
-          "showHeader": true,
-          "sort": {
-            "col": 0,
-            "desc": true
-          },
-          "span": 12,
-          "styles": [
-            {
-              "alias": "Time",
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "pattern": "Time",
-              "type": "date"
-            },
-            {
-              "alias": "",
-              "colorMode": null,
-              "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-              ],
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "decimals": 2,
-              "pattern": "",
-              "thresholds": [],
-              "type": "number",
-              "unit": "short"
-            },
-            {
-              "alias": "",
-              "colorMode": null,
-              "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-              ],
-              "decimals": 2,
-              "pattern": "/.*/",
-              "thresholds": [],
-              "type": "number",
-              "unit": "short"
-            }
-          ],
-          "targets": [
-            {
-              "expr": "node_docker_volume_available_bytes{instance !~ \"^master.*\"}",
-              "format": "table",
-              "intervalFactor": 2,
-              "refId": "A",
-              "step": 20
-            }
-          ],
-          "title": "Docker Volume Available (Bytes)",
-          "transform": "table",
-          "type": "table"
-        }
-      ],
-      "repeat": null,
-      "repeatIteration": null,
-      "repeatRowId": null,
-      "showTitle": false,
-      "title": "Dashboard Row",
-      "titleSize": "h6"
-    },
-    {
-      "collapse": false,
-      "height": 250,
-      "panels": [
+        },
         {
           "cacheTimeout": null,
           "colorBackground": false,
@@ -548,7 +364,7 @@
               "to": "null"
             }
           ],
-          "span": 12,
+          "span": 6,
           "sparkline": {
             "fillColor": "rgba(31, 118, 189, 0.18)",
             "full": false,
@@ -558,13 +374,13 @@
           "tableColumn": "Time",
           "targets": [
             {
-              "expr": "day_of_month(v=vector( node_docker_last_successful_update) instant-vector )\n",
+              "expr": "time(node_docker_last_successful_update)",
               "format": "table",
               "interval": "",
               "intervalFactor": 2,
               "metric": "node_docker_last_successful_update",
               "refId": "A",
-              "step": 240
+              "step": 60
             }
           ],
           "thresholds": "",
@@ -587,6 +403,61 @@
       "showTitle": false,
       "title": "Dashboard Row",
       "titleSize": "h6"
+    },
+    {
+      "collapse": false,
+      "height": 250,
+      "panels": [
+        {
+          "columns": [],
+          "fontSize": "100%",
+          "id": 9,
+          "links": [],
+          "pageSize": null,
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 2,
+            "desc": true
+          },
+          "span": 12,
+          "styles": [
+            {
+              "alias": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "expr": "node_docker_last_successful_update",
+              "format": "table",
+              "intervalFactor": 2,
+              "metric": "node_docker_last_successful_update_month",
+              "refId": "A",
+              "step": 4
+            }
+          ],
+          "title": "Panel Title",
+          "transform": "table",
+          "type": "table"
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": false,
+      "title": "Dashboard Row",
+      "titleSize": "h6"
     }
   ],
   "schemaVersion": 14,
@@ -596,7 +467,7 @@
     "list": []
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
@@ -626,5 +497,5 @@
   },
   "timezone": "browser",
   "title": "Docker Status",
-  "version": 10
+  "version": 12
 }

@@ -40,7 +40,12 @@ oc adm policy add-scc-to-user privileged system:serviceaccount:prometheus:defaul
 
 ### Label all nodes
 
-The DaemonSet for `node-exporter` expects to find a label *node-exporter=true* on the nodes that it should run on. Therefore make sure that every OpenShift node (including Masters and Infra Nodes) has the correct label:
+If there is a default project node selector for the OpenShift cluster (e.g. *env=users*) it is necessary to create a special node selector for the Prometheus project. Otherwise the Daemon Set for creating the node-exporter pods will fail with a `MatchNodeSelector` error on nodes that don't have that particular label.
+
+[NOTE]
+If your OpenShift Cluster does not have a default project node selector you can skip this section.
+
+To label all the nodes and then update the project namespace to reflect this label:
 
 [source,bash]
 ----

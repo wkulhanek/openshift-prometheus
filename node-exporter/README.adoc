@@ -38,6 +38,20 @@ Since the node exporter will be accessing resources from each host, the service 
 oc adm policy add-scc-to-user privileged system:serviceaccount:prometheus:default
 ----
 
+### Label all nodes
+
+The DaemonSet for `node-exporter` expects to find a label *node-exporter=true* on the nodes that it should run on. Therefore make sure that every OpenShift node (including Masters and Infra Nodes) has the correct label:
+
+[source,bash]
+----
+for node in $(oc get nodes --template='{{ range .items }}{{ .metadata.name }}{{ "\n" }}{{ end }}')
+do
+  oc label node $node node-exporter=true
+done
+oc annotate namespace prometheus openshift.io/node-selector=node-exporter=true
+----
+
+
 ### Instantiate the Template
 
 Execute the following command to add and instantiate the node-exporter template

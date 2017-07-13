@@ -19,6 +19,8 @@ objects:
   metadata:
     name: node-exporter
   spec:
+    nodeSelector:
+      monitoring: "true"
     template:
       metadata:
         labels:

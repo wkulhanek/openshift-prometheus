@@ -37,7 +37,7 @@
       daemon_reload: yes
   - name: Make sure firewall has open port 9100
     lineinfile:
-      path: /etc/sysconfig/iptables
+      dest: /etc/sysconfig/iptables
       insertafter: '-A FORWARD -j REJECT --reject-with icmp-host-prohibited'
       line: '-A OS_FIREWALL_ALLOW -p tcp -m state --state NEW -m tcp --dport 9100 -j ACCEPT'
       state: present

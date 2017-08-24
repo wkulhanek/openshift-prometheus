@@ -12,13 +12,13 @@ The following components are available:
 
 ## Project Organization
 
-A new project called _prometheus_ will be created to contain the entire ecosystem
+A new project called _prometheus_ will be created to contain the entire ecosystem. 
 
 Execute the following command to create the project:
 
 [source,bash]
 ----
-oc new-project prometheus --display-name="Prometheus"
+oc new-project prometheus --display-name="Prometheus Monitoring"
 ----
 
 ## Deploy Prometheus
@@ -31,7 +31,7 @@ Execute the following command to add the template to the project and instantiate
 
 [source,bash]
 ----
-oc create -f prometheus_3.5.yaml
+oc create -f prometheus.yaml
 oc new-app --template=prometheus
 ----
 

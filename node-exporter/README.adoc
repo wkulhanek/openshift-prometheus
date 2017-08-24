@@ -8,19 +8,32 @@ To deploy the node-exporter to OpenShift, complete the following steps.
 
 ### Open Firewall Ports
 
-Port 9100 needs to be opened on each OpenShift host in order for the Prometheus server to scrape the metrics.
+#### Ansible Version
 
+The easy way to open the firewall ports on all nodes is to run the provided Ansible playbook. It will open port 9100 and then restart the IP tables service.
+
+[source,bash]
+----
+ansible-playbook -i /etc/ansible/hosts update_firewall.yml
+----
+
+#### Manual Version
+
+To manually configure the firewall follow the following steps:
+
+. Port 9100 needs to be opened on each OpenShift host in order for the Prometheus server to scrape the metrics.
++
 Add the following line to `/etc/sysconfig/iptables`:
-
++
 [source,bash]
 ----
 -A OS_FIREWALL_ALLOW -p tcp -m state --state NEW -m tcp --dport 9100 -j ACCEPT
 ----
-
-Restart _iptables_ and OpenShift services in order to properly rebuild the rules
-
++
+. Restart _iptables_ and OpenShift services in order to properly rebuild the rules
++
 NOTE: The following commands will cause all running containers on the node to stop and restart
-
++
 [source,bash]
 ----
 systemctl reload  iptables

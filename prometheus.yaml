@@ -11,7 +11,7 @@ metadata:
 parameters:
 - description: The location of the prometheus image
   name: IMAGE_PROMETHEUS
-  value: registry.svc.ci.openshift.org/ci/prometheus:latest
+  value: openshift/prometheus:latest
 - description: The namespace to instantiate prometheus under. Defaults to 'prometheus'.
   name: NAMESPACE
   value: prometheus

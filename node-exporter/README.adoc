@@ -76,6 +76,5 @@ Execute the following command to add and instantiate the node-exporter template
 
 [source,bash]
 ----
-oc create -f node-exporter-template.yaml
-oc new-app --template=node-exporter
+oc new-app -f node-exporter.yaml
 ----

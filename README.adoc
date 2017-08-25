@@ -36,8 +36,8 @@ oc new-app -f prometheus.yaml
 
 Please refer to the following to enhance the functionality of Prometheus
 
-* link:Alertmanager[alertmanager]
-* link:node-exporter[node-exporter]
+* link:alertmanager[Alertmanager]
+* link:node-exporter[Node exporter]
 * link:https://github.com/wkulhanek/docker-openshift-grafana[Grafana]
 
 # Cleanup

@@ -4,14 +4,15 @@ The Alert Manager will be connected to Prometheus and send alerts when specific 
 
 The example implementation makes use of a link:https://prometheus.io/docs/alerting/configuration/#<webhook_config>[webhook] to notify a target system.
 
+The Alertmanager can be configured to support other or additional alerting mechanism by editing the ConfigMap `alertmanager` either in the template or after the Alertmanager has been deployed (in that case it needs to be restarted to pick up the new configuration).
+
 ## Deployment to OpenShift
 
-Use the following steps to deploy Alertmanager to OpenShift
+Use the following steps to deploy Alertmanager to OpenShift:
 
 [source,bash]
 ----
-oc create -f alertmanager.yaml
-oc new-app --template=alertmanager -p VOLUME_CAPACITY=4Gi -p "WEBHOOK_URL=<insert_url>"
+oc new-app -f alertmanager.yaml -p VOLUME_CAPACITY=4Gi -p "WEBHOOK_URL=<insert_url>"
 ----
 
 NOTE: Be sure to substitute the value of the Webhook URL when instantiating the template.

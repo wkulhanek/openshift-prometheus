@@ -152,5 +152,5 @@ objects:
       receivers:
       - name: 'webhook'
         webhook_configs:
-        - send_resolved: false
+        - send_resolved: true
           url: '${WEBHOOK_URL}'

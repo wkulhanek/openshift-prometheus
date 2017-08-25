@@ -1,6 +1,6 @@
 == Docker Info
 
-This diretory contains utility scripts to run on every Node with Docker to add information on space in the Docker Volume Group (which is a RAW device that is not mounted and therefore is not available to node exporter).
+This directory contains utility scripts to run on every Node with Docker to add information on space in the Docker Volume Group (which is a RAW device that is not mounted and therefore is not available to node exporter).
 
 It contains of a shell script that collects the available space and writes into a directory on the host. This directory is mounted into the node exporter pods so that the node exporter can report on the contents of any file in that directory.
 There is also a cron script that runs every 5 minutes.
@@ -9,8 +9,7 @@ To install run the following command from your OpenShift bastion host (where you
 
 [source,bash]
 ----
-#!/bin/bash
 ansible-playbook -i /etc/ansible/hosts install_dockerinfo.yml
 ----
 
-There is a Grafana Dashboard (DockerStatus.json) that reads the values from this utility script and displays them in a graphical fashion. Simpmly import the Dashboard into Grafana once Grafana has been set up and connected to Prometheus.
+There is a Grafana Dashboard (DockerStatus.json) that reads the values from this utility script and displays them in a graphical fashion. Simply import the Dashboard into Grafana once Grafana has been set up and connected to Prometheus.

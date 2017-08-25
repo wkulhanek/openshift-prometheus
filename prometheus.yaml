@@ -21,6 +21,9 @@ parameters:
 - description: Alertmanager Hostname and Port
   name: ALERT_MANAGER_HOST_PORT
   value: alertmanager:9093
+- description: Persistent Volume Claim Size
+  name: VOLUME_CAPACITY
+  value: 4Gi
 objects:
 - apiVersion: v1
   kind: ServiceAccount
@@ -116,16 +119,27 @@ objects:
             name: rules-volume
         restartPolicy: Always
         volumes:
-        - configMap:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: prometheus-data
+        - name: config-volume
+          configMap:
             defaultMode: 420
             name: prometheus
-          name: config-volume
-        - name: data-volume
-          emptyDir: {}
-        - configMap:
+        - name: rules-volume
+          configMap:
             defaultMode: 420
             name: prometheus-rules
-          name: rules-volume
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: prometheus-data
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: ${VOLUME_CAPACITY}
 - apiVersion: v1
   kind: ConfigMap
   metadata:

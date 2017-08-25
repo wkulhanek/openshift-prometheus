@@ -25,7 +25,7 @@ oc new-project prometheus --display-name="Prometheus Monitoring"
 
 An OpenShift template has been provided to streamline the deployment to OpenShift.
 
-Execute the following command to add the template to the project and instantiate the template:
+Execute the following command to instantiate the Prometheus template:
 
 [source,bash]
 ----
@@ -36,8 +36,8 @@ oc new-app -f prometheus.yaml
 
 Please refer to the following to enhance the functionality of Prometheus
 
-* link:Alertmanager[alertmanager]
-* link:node-exporter[node-exporter]
+* link:alertmanager[Alertmanager]
+* link:node-exporter[Node exporter]
 * link:https://github.com/wkulhanek/docker-openshift-grafana[Grafana]
 
 # Cleanup

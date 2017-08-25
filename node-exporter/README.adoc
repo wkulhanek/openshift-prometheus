@@ -51,24 +51,19 @@ Since the node exporter will be accessing resources from each host, the service 
 oc adm policy add-scc-to-user privileged system:serviceaccount:prometheus:default
 ----
 
-### Label all nodes
+### Node Selector
 
-If there is a default project node selector for the OpenShift cluster (e.g. *env=users*) it is necessary to create a special node selector for the Prometheus project. Otherwise the Daemon Set for creating the node-exporter pods will fail with a `MatchNodeSelector` error on nodes that don't have that particular label.
+If there is a default project node selector for the OpenShift cluster (e.g. *env=users*) it is necessary to set en empty node selector for the Prometheus project. Otherwise the Daemon Set for creating the node-exporter pods will fail with a `MatchNodeSelector` error on nodes that don't have that particular label.
 
 [NOTE]
 If your OpenShift Cluster does not have a default project node selector you can skip this section.
 
-To label all the nodes and then update the project namespace to reflect this label:
+To set an empty node selector:
 
 [source,bash]
 ----
-for node in $(oc get nodes --template='{{ range .items }}{{ .metadata.name }}{{ "\n" }}{{ end }}')
-do
-  oc label node $node node-exporter=true
-done
-oc annotate namespace prometheus openshift.io/node-selector=node-exporter=true
+oc annotate namespace prometheus openshift.io/node-selector=""
 ----
-
 
 ### Instantiate the Template
 

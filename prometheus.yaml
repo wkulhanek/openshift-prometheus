@@ -24,7 +24,7 @@ parameters:
 - description: Persistent Volume Claim Size
   name: VOLUME_CAPACITY
   value: 4Gi
-- description: Router Password (get via oc set env dc router -n default --list|grep STATS)
+- description: Router Password (oc set env dc router -n default --list|grep STATS_PASSWORD)
   name: ROUTER_PASSWORD
   required: true
 
@@ -374,6 +374,13 @@ objects:
           replacement: '${1}:9100'
           target_label: __address__
 
+      # Scrape Config for HA Proxy (OpenShift Routers) running on the
+      # OpenShift Cluster (this works from OpenShift 3.6 and on).
+      # Port 1936 needs to be open in the Firewall on the nodes (Infranodes)
+      # Router(s) are running.
+      # This Job requires basic authentication. Username is always "admin".
+      # Actual password can be found out by running the command:
+      #   oc set env dc router -n default --list|grep STATS_PASSWORD
       - job_name: 'haproxy'
         metrics_path: '/metrics'
         scheme: http

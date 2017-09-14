@@ -36,7 +36,7 @@ The router also requires basic authentication to be allowed to scrape the metric
 
 [source,bash]
 ----
-oc set env dc router -n default --list|grep STATS_PASSWORD
+oc set env dc router -n default --list|grep STATS_PASSWORD|awk -F"=" '{print $2}'
 ----
 
 An OpenShift template has been provided to streamline the deployment to OpenShift.

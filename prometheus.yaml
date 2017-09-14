@@ -24,6 +24,10 @@ parameters:
 - description: Persistent Volume Claim Size
   name: VOLUME_CAPACITY
   value: 4Gi
+- description: Router Password (get via oc set env dc router -n default --list|grep STATS)
+  name: ROUTER_PASSWORD
+  required: true
+
 objects:
 
 - apiVersion: v1
@@ -369,6 +373,15 @@ objects:
           regex: '(.*):10250'
           replacement: '${1}:9100'
           target_label: __address__
+
+      - job_name: 'haproxy'
+        metrics_path: '/metrics'
+        scheme: http
+        basic_auth:
+          username: admin
+          password: ${ROUTER_PASSWORD}
+          static_configs:
+          - targets: ['router.default.svc.cluster.local:1936']
 
       alerting:
         alertmanagers:

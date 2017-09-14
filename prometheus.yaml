@@ -380,8 +380,8 @@ objects:
         basic_auth:
           username: admin
           password: ${ROUTER_PASSWORD}
-          static_configs:
-          - targets: ['router.default.svc.cluster.local:1936']
+        static_configs:
+        - targets: ['router.default.svc.cluster.local:1936']
 
       alerting:
         alertmanagers:

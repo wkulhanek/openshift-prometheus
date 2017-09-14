@@ -23,13 +23,29 @@ oc new-project prometheus --display-name="Prometheus Monitoring"
 
 ## Deploy Prometheus
 
-An OpenShift template has been provided to streamline the deployment to OpenShift.
+Starting with OpenShift 3.6 the OpenShift routers expose a metrics endpoint on port 1936. For Prometheus to be able to monitor the routers this port needs to be open.
 
-Execute the following command to instantiate the Prometheus template:
+Execute the following command to open the port on the nodes:
 
 [source,bash]
 ----
-oc new-app -f prometheus.yaml
+ansible-playbook ./update_firewall.yml
+----
+
+The router also requires basic authentication to be allowed to scrape the metrics. Find the router password by executing the following command:
+
+[source,bash]
+----
+oc set env dc router -n default --list|grep STATS_PASSWORD
+----
+
+An OpenShift template has been provided to streamline the deployment to OpenShift.
+
+Execute the following command to instantiate the Prometheus template using the previously retrieved router password as a parameter:
+
+[source,bash]
+----
+oc new-app -f prometheus.yaml --param ROUTER_PASSWORD=<Router Password>
 ----
 
 ## Next Steps

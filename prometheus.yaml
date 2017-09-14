@@ -357,7 +357,7 @@ objects:
       # These Note Exporters can be run either as a Daemon Set in the OpenShift
       # Cluster or natively. Regardless of deployment they will listen on Port 9100
       # which has to open in the Firewall.
-      - job_name: 'node-exporter'
+      - job_name: 'node-exporters'
         tls_config:
           ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
           insecure_skip_verify: true
@@ -381,7 +381,7 @@ objects:
       # This Job requires basic authentication. Username is always "admin".
       # Actual password can be found out by running the command:
       #   oc set env dc router -n default --list|grep STATS_PASSWORD
-      - job_name: 'haproxy'
+      - job_name: 'openshift-routers'
         metrics_path: '/metrics'
         scheme: http
         basic_auth:

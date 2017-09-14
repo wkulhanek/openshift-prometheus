@@ -1,0 +1,17 @@
+---
+- hosts: nodes
+  remote_user: ec2_user
+  become: yes
+  become_user: root
+  tasks:
+  - name: Make sure firewall has port 1936 open
+    lineinfile:
+      dest: /etc/sysconfig/iptables
+      insertafter: '-A FORWARD -j REJECT --reject-with icmp-host-prohibited'
+      line: '-A OS_FIREWALL_ALLOW -p tcp -m state --state NEW -m tcp --dport 1936 -j ACCEPT'
+      state: present
+  - name: Restart IP Tables service
+    systemd:
+      name: iptables
+      state: restarted
+      daemon_reload: yes

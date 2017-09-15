@@ -10,6 +10,7 @@
       insertafter: '-A FORWARD -j REJECT --reject-with icmp-host-prohibited'
       line: '-A OS_FIREWALL_ALLOW -p tcp -m state --state NEW -m tcp --dport 1936 -j ACCEPT'
       state: present
+  # Maybe not restart the service but rather change the running iptables to reflect that rule if the file above needed updating.
   - name: Restart IP Tables service
     systemd:
       name: iptables

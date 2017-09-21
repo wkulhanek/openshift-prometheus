@@ -11,7 +11,7 @@ metadata:
 parameters:
 - description: The location of the prometheus image
   name: IMAGE_PROMETHEUS
-  value: openshift/prometheus:latest
+  value: wkulhanek/prometheus:latest
 - description: The namespace to instantiate prometheus under. Defaults to 'prometheus'.
   name: NAMESPACE
   value: prometheus
@@ -93,9 +93,9 @@ objects:
         containers:
         - name: prometheus
           args:
-          - --storage.tsdb.retention=6h
           - --config.file=/etc/prometheus/prometheus.yml
           - --web.listen-address=:9090
+          - --storage.tsdb.retention=24h
           image: ${IMAGE_PROMETHEUS}
           imagePullPolicy: IfNotPresent
           livenessProbe:

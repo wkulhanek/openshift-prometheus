@@ -27,7 +27,7 @@ CMD        [ "--config.file=/etc/prometheus/prometheus.yml", \
              "--web.console.templates=/usr/share/prometheus/consoles", \
              "--web.console.libraries=/usr/share/prometheus/console_libraries", \
              "--storage.tsdb.path=/prometheus", \
-             "--storage.tsdb.retention=24h"
+             "--storage.tsdb.retention=24h", \
+             "--storage.tsdb.min-block-duration=15m", \
+             "--storage.tsdb.max-block-duration=60m" \
             ]
-
-#--config.file=/etc/prometheus/prometheus.yml                     --web.listen-address=:9090                         --web.console.templates=/usr/share/prometheus/consoles                         --web.console.libraries=/usr/share/prometheus/console_libraries              --storage.tsdb.path=/prometheus --storage.tsdb.retention=24h

@@ -1,0 +1,25 @@
+---
+- hosts: nodes
+  remote_user: ec2_user
+  become: yes
+  become_user: root
+  tasks:
+  # Open Firewall Port 1936 for future sessions by adding the rule to
+  # the iptables file.
+  - name: Open Firewall port 1936 for future sessions
+    lineinfile:
+      dest: /etc/sysconfig/iptables
+      insertafter: '-A FORWARD -j REJECT --reject-with icmp-host-prohibited'
+      line: '-A OS_FIREWALL_ALLOW -p tcp -m state --state NEW -m tcp --dport 1936 -j ACCEPT'
+      state: present
+  # Open Firewall Port 1936 for current session by adding the rule to the
+  # current iptables configuration. We won't need to restart the iptables
+  # service - which will ensure all OpenShift rules stay in place.
+  - name: Open Firewall Port 1936 for current session
+    iptables:
+      action: insert
+      protocol: tcp
+      destination_port: 1936
+      state: present
+      chain: OS_FIREWALL_ALLOW
+      jump: ACCEPT

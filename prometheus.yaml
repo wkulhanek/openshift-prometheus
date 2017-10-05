@@ -90,6 +90,8 @@ objects:
         name: prometheus
       spec:
         serviceAccountName: prometheus
+        nodeSelector:
+          prometheus-host: true
         containers:
         - name: prometheus
           args:
@@ -140,8 +142,9 @@ objects:
         restartPolicy: Always
         volumes:
         - name: data-volume
-          persistentVolumeClaim:
-            claimName: prometheus-data
+          hostPath:
+            path: /var/lib/prometheus-data
+            type: Directory
         - name: config-volume
           configMap:
             defaultMode: 420

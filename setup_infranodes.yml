@@ -23,3 +23,16 @@
       state: present
       chain: OS_FIREWALL_ALLOW
       jump: ACCEPT
+  #Create Directory /var/lib/prometheus-data with correct permissions
+  - name: Create directory /var/lib/prometheus-data
+    file:
+      path: /var/lib/prometheus-data
+      state: directory
+      group: root
+      owner: root
+      mode: 0777
+
+
+# TBD:
+#Add label "prometheus-host=true" to one Infranode
+#Run the whole playbook ONLY on Infranodes

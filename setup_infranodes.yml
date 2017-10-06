@@ -1,9 +1,39 @@
 ---
-- hosts: nodes
+- hosts: localhost
+  gather_facts: false
+  tasks:
+  # Find out which nodes are Infranodes and add them to a new group: infranodes
+  - name: Add Infranodes to a new infranodes Group
+    add_host:
+      name: "{{ item }}"
+      groups: infranodes
+    with_items: "{{ groups['nodes'] }}"
+    when:
+    - item | match("^infranode.*")
+  - name: Add Masters to a new masters Group
+    add_host:
+      name: "{{ item }}"
+      groups: masters
+    with_items: "{{ groups['nodes'] }}"
+    when:
+    - item | match("^master.*")
+- hosts: infranodes
+  tasks:
+  - debug:
+      msg: OK
+- hosts: masters
+  tasks:
+  - debug:
+      msg: OK
+
+- hosts: infranodes
   remote_user: ec2_user
   become: yes
   become_user: root
   tasks:
+  # OpenShift Routers expose /metrics on port 1936. Therefore we need to open
+  # the port for both future and current sessions so that Prometheus can access
+  # the router metrics.
   # Open Firewall Port 1936 for future sessions by adding the rule to
   # the iptables file.
   - name: Open Firewall port 1936 for future sessions
@@ -23,7 +53,7 @@
       state: present
       chain: OS_FIREWALL_ALLOW
       jump: ACCEPT
-  #Create Directory /var/lib/prometheus-data with correct permissions
+  # Create Directory /var/lib/prometheus-data with correct permissions
   - name: Create directory /var/lib/prometheus-data
     file:
       path: /var/lib/prometheus-data
@@ -32,7 +62,13 @@
       owner: root
       mode: 0777
 
-
-# TBD:
-#Add label "prometheus-host=true" to one Infranode
-#Run the whole playbook ONLY on Infranodes
+# Add label "prometheus-host=true" to our infranodes
+# Do that via the oc label command from the first master host
+- hosts: masters[0]
+  remote_user: ec2_user
+  become: yes
+  become_user: root
+  tasks:
+  - name: Label Infranodes with prometheus-host=true
+    shell: oc label node {{ item }} prometheus-host=true --overwrite
+    with_items: "{{ groups['infranodes'] }}"

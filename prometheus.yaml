@@ -12,13 +12,10 @@ parameters:
 - description: The location of the prometheus image
   name: IMAGE_PROMETHEUS
   value: wkulhanek/prometheus:latest
-- description: The namespace to instantiate prometheus under. Defaults to 'prometheus'.
-  name: NAMESPACE
-  value: prometheus
 - description: The scheme to communicate with the Alertmanager. Defaults to 'http'.
   name: ALERT_MANAGER_SCHEME
   value: http
-- description: Alertmanager Hostname and Port
+- description: Alertmanager Hostname and Port. Defaults to 'alertmanager:9093'.
   name: ALERT_MANAGER_HOST_PORT
   value: alertmanager:9093
 - description: Router Password (oc set env dc router -n default --list|grep STATS_PASSWORD)
@@ -41,7 +38,6 @@ objects:
   subjects:
   - kind: ServiceAccount
     name: prometheus
-    namespace: "${NAMESPACE}"
 
 - apiVersion: v1
   kind: Route

@@ -17,14 +17,6 @@
     with_items: "{{ groups['nodes'] }}"
     when:
     - item | match("^master.*")
-- hosts: infranodes
-  tasks:
-  - debug:
-      msg: OK
-- hosts: masters
-  tasks:
-  - debug:
-      msg: OK
 
 - hosts: infranodes
   remote_user: ec2_user
@@ -54,6 +46,8 @@
       chain: OS_FIREWALL_ALLOW
       jump: ACCEPT
   # Create Directory /var/lib/prometheus-data with correct permissions
+  # Make sure the directory has SELinux Type svirt_sandbox_file_t otherwise
+  # there is a permissions problem trying to mount it into the pod.
   - name: Create directory /var/lib/prometheus-data
     file:
       path: /var/lib/prometheus-data
@@ -62,9 +56,6 @@
       owner: root
       mode: 0777
       setype: svirt_sandbox_file_t
-
-      # chcon -R -t svirt_sandbox_file_t /var/lib/prometheus-data
-      # restorecon -Rv /var/lib/prometheus-data
 
 # Add label "prometheus-host=true" to our infranodes
 # Do that via the oc label command from the first master host

@@ -57,11 +57,11 @@ Execute the following command to instantiate the Prometheus template using the p
 oc new-app -f prometheus.yaml --param ROUTER_PASSWORD=<Router Password>
 ----
 
-Since Prometheus needs to use a local disk to write its metrics add the `hostpath` SCC to the *prometheus* service account:
+Since Prometheus needs to use a local disk to write its metrics add the `privileged` SCC to the *prometheus* service account:
 
 [source,bash]
 ----
-oc adm policy add-scc-to-user hostaccess prometheus
+oc adm policy add-scc-to-user privileged prometheus
 ----
 
 Make sure your Prometheus pod is running (on an Infranode):

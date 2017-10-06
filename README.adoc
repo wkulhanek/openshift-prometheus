@@ -21,6 +21,13 @@ Execute the following command to create the project:
 oc new-project prometheus --display-name="Prometheus Monitoring"
 ----
 
+Make sure that there is not a default node selector on the project:
+
+[source,bash]
+----
+oc annotate namespace prometheus openshift.io/node-selector=""
+----
+
 ## Deploy Prometheus
 
 Starting with OpenShift 3.6 the OpenShift routers expose a metrics endpoint on port 1936. For Prometheus to be able to monitor the routers this port needs to be open.
@@ -57,6 +64,13 @@ Since Prometheus needs to use a local disk to write its metrics add the `hostpat
 oc adm policy add-scc-to-user hostaccess prometheus
 ----
 
+Make sure your Prometheus pod is running (on an Infranode):
+
+[source,bash]
+----
+oc get pod -o wide
+----
+
 ## Next Steps
 
 Please refer to the following to enhance the functionality of Prometheus
@@ -67,12 +81,13 @@ Please refer to the following to enhance the functionality of Prometheus
 
 # Cleanup
 
-Simply delete the project and the cluster-reader binding (which gets created by the template but doesn't get deleted as part of the project):
+Delete the project and the cluster-reader binding (which gets created by the template but doesn't get deleted as part of the project):
 
 [source,bash]
 ----
 oc delete project prometheus
 oc delete clusterrolebinding prometheus-cluster-reader
+oc adm policy remove-scc-from-user privileged prometheus
 ----
 
 You will also need to clean up the directory /var/lib/prometheus-data on the Infranode(s) and remove the label `prometheus-host=true` from the Infranode(s).

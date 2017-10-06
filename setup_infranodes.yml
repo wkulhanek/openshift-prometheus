@@ -61,6 +61,10 @@
       group: root
       owner: root
       mode: 0777
+      setype: svirt_sandbox_file_t
+
+      # chcon -R -t svirt_sandbox_file_t /var/lib/prometheus-data
+      # restorecon -Rv /var/lib/prometheus-data
 
 # Add label "prometheus-host=true" to our infranodes
 # Do that via the oc label command from the first master host

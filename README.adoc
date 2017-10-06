@@ -38,7 +38,7 @@ Run the following Ansible playbook to configure the infranodes:
 
 [source,bash]
 ----
-ansible-playbook ./setup_infranodes.yml
+ansible-playbook -i /etc/ansible/hosts ./setup_infranodes.yml
 ----
 
 The router also requires basic authentication to be allowed to scrape the metrics. Find the router password by executing the following command:
@@ -61,7 +61,7 @@ Since Prometheus needs to use a local disk to write its metrics add the `privile
 
 [source,bash]
 ----
-oc adm policy add-scc-to-user privileged prometheus
+oc adm policy add-scc-to-user privileged system:serviceaccount:prometheus:prometheus
 ----
 
 Make sure your Prometheus pod is running (on an Infranode):

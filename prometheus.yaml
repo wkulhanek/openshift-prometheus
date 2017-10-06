@@ -9,6 +9,9 @@ metadata:
     iconClass: icon-cogs
     tags: "monitoring,prometheus,time-series"
 parameters:
+- description: The namespace to instantiate prometheus under. Defaults to 'prometheus'.
+  name: NAMESPACE
+  value: prometheus
 - description: The location of the prometheus image
   name: IMAGE_PROMETHEUS
   value: wkulhanek/prometheus:latest
@@ -38,6 +41,7 @@ objects:
   subjects:
   - kind: ServiceAccount
     name: prometheus
+    namespace: ${NAMESPACE}
 
 - apiVersion: v1
   kind: Route

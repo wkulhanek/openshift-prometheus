@@ -69,8 +69,8 @@ objects:
     selector:
       app: prometheus
 
-- apiVersion: extensions/v1beta1
-  kind: Deployment
+- apiVersion: v1
+  kind: DeploymentConfig
   metadata:
     labels:
       app: prometheus
@@ -87,6 +87,8 @@ objects:
         name: prometheus
       spec:
         serviceAccountName: prometheus
+        securityContext:
+          privileged: true
         nodeSelector:
           prometheus-host: "true"
         containers:

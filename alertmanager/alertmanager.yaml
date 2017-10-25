@@ -46,8 +46,8 @@ objects:
       targetPort: 9093
     selector:
       app: alertmanager
-- apiVersion: extensions/v1beta1
-  kind: Deployment
+- apiVersion: v1
+  kind: DeploymentConfig
   metadata:
     labels:
       app: alertmanager
@@ -55,12 +55,13 @@ objects:
   spec:
     replicas: 1
     selector:
-      matchLabels:
-        app: alertmanager
+      app: alertmanager
+      deploymentconfig: alertmanager
     template:
       metadata:
         labels:
           app: alertmanager
+          deploymentconfig: alertmanager
         name: alertmanager
       spec:
         containers:

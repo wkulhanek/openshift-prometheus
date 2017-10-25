@@ -1,7 +1,7 @@
 FROM        centos:7
 MAINTAINER  Wolfgang Kulhanek <WolfgangKulhanek@gmail.com>
 
-ENV PROMETHEUS_VERSION=2.0.0-beta.5
+ENV PROMETHEUS_VERSION=2.0.0-rc.1
 
 RUN yum -y update && yum -y upgrade  && \
     yum -y clean all && \

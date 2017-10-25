@@ -42,13 +42,13 @@ objects:
           securityContext:
             privileged: true
           args:
-            - -collector.procfs
+            - --path.procfs
             - /host/proc
-            - -collector.sysfs
+            - --path.sysfs
             - /host/sys
-            - -collector.filesystem.ignored-mount-points
+            - --collector.filesystem.ignored-mount-points
             - '"^/(sys|proc|dev|host|etc)($|/)"'
-            - -collector.textfile.directory
+            - --collector.textfile.directory
             - /textfile_collector
           volumeMounts:
             - name: dev

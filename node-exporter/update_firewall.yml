@@ -4,14 +4,22 @@
   become: yes
   become_user: root
   tasks:
-  - name: Make sure firewall has open port 9100
+  # Open Firewall Port 9100 for future sessions by adding the rule to
+  # the iptables file.
+  - name: Open Firewall port 9100 for future sessions
     lineinfile:
       dest: /etc/sysconfig/iptables
       insertafter: '-A FORWARD -j REJECT --reject-with icmp-host-prohibited'
       line: '-A OS_FIREWALL_ALLOW -p tcp -m state --state NEW -m tcp --dport 9100 -j ACCEPT'
       state: present
-  - name: Restart IP Tables service
-    systemd:
-      name: iptables
-      state: restarted
-      daemon_reload: yes
+  # Open Firewall Port 9100 for current session by adding the rule to the
+  # current iptables configuration. We won't need to restart the iptables
+  # service - which will ensure all OpenShift rules stay in place.- name: Restart IP Tables service
+  - name: Open Firewall Port 9100 for current session
+    iptables:
+      action: insert
+      protocol: tcp
+      destination_port: 9100
+      state: present
+      chain: OS_FIREWALL_ALLOW
+      jump: ACCEPT

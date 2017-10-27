@@ -21,9 +21,6 @@ parameters:
 - description: Alertmanager Hostname and Port
   name: ALERT_MANAGER_HOST_PORT
   value: alertmanager:9093
-- description: Persistent Volume Claim Size
-  name: VOLUME_CAPACITY
-  value: 4Gi
 - description: Router Password (oc set env dc router -n default --list|grep STATS_PASSWORD)
   name: ROUTER_PASSWORD
   required: true
@@ -72,24 +69,27 @@ objects:
     selector:
       app: prometheus
 
-- apiVersion: extensions/v1beta1
-  kind: Deployment
+- apiVersion: v1
+  kind: DeploymentConfig
   metadata:
+    name: prometheus
     labels:
       app: prometheus
-    name: prometheus
   spec:
     replicas: 1
     selector:
-      matchLabels:
-        app: prometheus
+      app: prometheus
+      deploymentconfig: prometheus
     template:
       metadata:
         labels:
           app: prometheus
+          deploymentconfig: prometheus
         name: prometheus
       spec:
         serviceAccountName: prometheus
+        securityContext:
+          privileged: true
         containers:
         - name: prometheus
           args:
@@ -140,8 +140,7 @@ objects:
         restartPolicy: Always
         volumes:
         - name: data-volume
-          persistentVolumeClaim:
-            claimName: prometheus-data
+          emptyDir: {}
         - name: config-volume
           configMap:
             defaultMode: 420
@@ -150,17 +149,6 @@ objects:
           configMap:
             defaultMode: 420
             name: prometheus-rules
-
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    name: prometheus-data
-  spec:
-    accessModes:
-      - ReadWriteOnce
-    resources:
-      requests:
-        storage: ${VOLUME_CAPACITY}
 
 - apiVersion: v1
   kind: ConfigMap

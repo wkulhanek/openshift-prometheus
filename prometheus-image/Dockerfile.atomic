@@ -5,13 +5,11 @@ ENV PROMETHEUS_VERSION=2.0.0
 
 RUN microdnf update && \
     microdnf install tar gzip --enablerepo=rhel-7-server-rpms && \
-    microdnf clean all 
-
-RUN curl -L -o /tmp/prometheus.tar.gz https://github.com/prometheus/prometheus/releases/download/v$PROMETHEUS_VERSION/prometheus-$PROMETHEUS_VERSION.linux-amd64.tar.gz && \
+    microdnf clean all  && \
+    curl -L -o /tmp/prometheus.tar.gz https://github.com/prometheus/prometheus/releases/download/v$PROMETHEUS_VERSION/prometheus-$PROMETHEUS_VERSION.linux-amd64.tar.gz && \
     tar -xzf /tmp/prometheus.tar.gz && \
-    mv ./prometheus-$PROMETHEUS_VERSION.linux-amd64 /usr/share/prometheus 
-
-RUN ln -s /usr/share/prometheus/prometheus /bin/prometheus && \
+    mv ./prometheus-$PROMETHEUS_VERSION.linux-amd64 /usr/share/prometheus && \
+    ln -s /usr/share/prometheus/prometheus /bin/prometheus && \
     ln -s /usr/share/prometheus/promtool /bin/promtool && \
     mkdir -p /etc/prometheus && \
     mkdir -p /prometheus && \

@@ -1,7 +1,7 @@
 FROM        centos:7
 MAINTAINER  Wolfgang Kulhanek <WolfgangKulhanek@gmail.com>
 
-ENV ALERT_MANAGER_VERSION=0.10.0
+ENV ALERT_MANAGER_VERSION=0.11.0
 
 RUN yum -y update && yum -y upgrade  && \
     yum -y clean all && \

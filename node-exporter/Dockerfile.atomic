@@ -1,7 +1,7 @@
 FROM        registry.access.redhat.com/rhel7-atomic:7.4
 MAINTAINER  Wolfgang Kulhanek <WolfgangKulhanek@gmail.com>
 
-ENV NODE_EXPORTER_VERSION=0.15.1
+ENV NODE_EXPORTER_VERSION=0.15.2
 
 RUN microdnf update && \
     microdnf install tar gzip --enablerepo=rhel-7-server-rpms && \

@@ -1,7 +1,7 @@
 FROM        registry.access.redhat.com/rhel7-atomic:7.4
 MAINTAINER  Wolfgang Kulhanek <WolfgangKulhanek@gmail.com>
 
-ENV ALERT_MANAGER_VERSION=0.12.0
+ENV ALERT_MANAGER_VERSION=0.13.0
 
 RUN microdnf update && \
     microdnf install tar gzip --enablerepo=rhel-7-server-rpms && \

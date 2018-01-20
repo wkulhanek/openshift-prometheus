@@ -1,10 +1,11 @@
 FROM        centos:7
 MAINTAINER  Wolfgang Kulhanek <WolfgangKulhanek@gmail.com>
 
-ENV PROMETHEUS_VERSION=2.0.0
+ENV PROMETHEUS_VERSION=2.1.0
 
 RUN yum -y update && yum -y upgrade  && \
     yum -y clean all && \
+    rm -rf /var/cache/yum && \
     curl -L -o /tmp/prometheus.tar.gz https://github.com/prometheus/prometheus/releases/download/v$PROMETHEUS_VERSION/prometheus-$PROMETHEUS_VERSION.linux-amd64.tar.gz && \
     tar -xzf /tmp/prometheus.tar.gz && \
     mv ./prometheus-$PROMETHEUS_VERSION.linux-amd64 /usr/share/prometheus && \

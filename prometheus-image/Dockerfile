@@ -7,7 +7,7 @@ RUN yum -y update && yum -y upgrade  && \
     yum -y clean all && \
     rm -rf /var/cache/yum && \
     curl -L -o /tmp/prometheus.tar.gz https://github.com/prometheus/prometheus/releases/download/v$PROMETHEUS_VERSION/prometheus-$PROMETHEUS_VERSION.linux-amd64.tar.gz && \
-    tar -xzf /tmp/prometheus.tar.gz && \
+    tar -xmzf /tmp/prometheus.tar.gz && \
     mv ./prometheus-$PROMETHEUS_VERSION.linux-amd64 /usr/share/prometheus && \
     ln -s /usr/share/prometheus/prometheus /bin/prometheus && \
     ln -s /usr/share/prometheus/promtool /bin/promtool && \

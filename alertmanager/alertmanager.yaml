@@ -66,8 +66,8 @@ objects:
         containers:
         - name: alertmanager
           args:
-          - -config.file=/etc/alertmanager/config.yml
-          - -storage.path=/alertmanager
+          - --config.file=/etc/alertmanager/config.yml
+          - --storage.path=/alertmanager
           image: ${IMAGE_ALERTMANAGER}
           imagePullPolicy: IfNotPresent
           livenessProbe:

@@ -1,5 +1,5 @@
-FROM        registry.access.redhat.com/rhel7-atomic:7.4
-MAINTAINER  Wolfgang Kulhanek <WolfgangKulhanek@gmail.com>
+FROM  registry.access.redhat.com/rhel7-atomic:7.4
+LABEL maintainer="Wolfgang Kulhanek <WolfgangKulhanek@gmail.com>"
 
 ENV NODE_EXPORTER_VERSION=0.15.2
 

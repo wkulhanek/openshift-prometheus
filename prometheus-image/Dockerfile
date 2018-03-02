@@ -1,5 +1,5 @@
-FROM        centos:7
-MAINTAINER  Wolfgang Kulhanek <WolfgangKulhanek@gmail.com>
+FROM docker.io/centos:7
+LABEL maintainer="Wolfgang Kulhanek <WolfgangKulhanek@gmail.com>"
 
 ENV PROMETHEUS_VERSION=2.1.0
 

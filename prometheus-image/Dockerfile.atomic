@@ -1,5 +1,5 @@
-FROM        registry.access.redhat.com/rhel7-atomic:7.4
-MAINTAINER  Wolfgang Kulhanek <WolfgangKulhanek@gmail.com>
+FROM  registry.access.redhat.com/rhel7-atomic:7.4
+LABEL maintainer="Wolfgang Kulhanek <WolfgangKulhanek@gmail.com>"
 
 ENV PROMETHEUS_VERSION=2.1.0
 

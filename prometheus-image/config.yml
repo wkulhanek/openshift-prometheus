@@ -1,10 +1,5 @@
-# Global configurations
-global:
-  scrape_interval: 30s
-  scrape_timeout: 30s
-
 rule_files:
-  - "/etc/prometheus-rules/*.rules.yml"
+  - 'prometheus.rules'
 
 # A scrape configuration for running Prometheus on a Kubernetes cluster.
 # This uses separate scrape configs for cluster components (i.e. API server, node)
@@ -26,25 +21,9 @@ scrape_configs:
   kubernetes_sd_configs:
   - role: endpoints
 
-  # Default to scraping over https. If required, just disable this or change to
-  # `http`.
   scheme: https
-
-  # This TLS & bearer token file config is used to connect to the actual scrape
-  # endpoints for cluster components. This is separate to discovery auth
-  # configuration because discovery & scraping are two separate concerns in
-  # Prometheus. The discovery auth config is automatic if Prometheus runs inside
-  # the cluster. Otherwise, more config options have to be provided within the
-  # <kubernetes_sd_config>.
   tls_config:
     ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-    # If your node certificates are self-signed or use a different CA to the
-    # master CA, then disable certificate verification below. Note that
-    # certificate verification is an integral part of a secure infrastructure
-    # so this should only be disabled in a controlled environment. You can
-    # disable certificate verification by uncommenting the line below.
-    #
-    # insecure_skip_verify: true
   bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
 
   # Keep only the default/kubernetes service endpoints for the https port. This
@@ -61,25 +40,9 @@ scrape_configs:
 # the Kubelet and other components.
 - job_name: 'kubernetes-nodes'
 
-  # Default to scraping over https. If required, just disable this or change to
-  # `http`.
   scheme: https
-
-  # This TLS & bearer token file config is used to connect to the actual scrape
-  # endpoints for cluster components. This is separate to discovery auth
-  # configuration because discovery & scraping are two separate concerns in
-  # Prometheus. The discovery auth config is automatic if Prometheus runs inside
-  # the cluster. Otherwise, more config options have to be provided within the
-  # <kubernetes_sd_config>.
   tls_config:
     ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-    # If your node certificates are self-signed or use a different CA to the
-    # master CA, then disable certificate verification below. Note that
-    # certificate verification is an integral part of a secure infrastructure
-    # so this should only be disabled in a controlled environment. You can
-    # disable certificate verification by uncommenting the line below.
-    #
-    # insecure_skip_verify: true
   bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
 
   kubernetes_sd_configs:
@@ -89,56 +52,55 @@ scrape_configs:
   - action: labelmap
     regex: __meta_kubernetes_node_label_(.+)
 
-# Scrape config for controllers (for OCP 3.7).
+# Scrape config for controllers.
 #
 # Each master node exposes a /metrics endpoint on :8444 that contains operational metrics for
 # the controllers.
 #
 # TODO: move this to a pure endpoints based metrics gatherer when controllers are exposed via
 #       endpoints.
-# - job_name: 'kubernetes-controllers'
-#
-#   scheme: https
-#   tls_config:
-#     ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-#   bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-#
-#   kubernetes_sd_configs:
-#   - role: endpoints
-#
-#   # Keep only the default/kubernetes service endpoints for the https port, and then
-#   # set the port to 8444. This is the default configuration for the controllers on OpenShift
-#   # masters.
-#   relabel_configs:
-#   - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
-#     action: keep
-#     regex: default;kubernetes;https
-#   - source_labels: [__address__]
-#     action: replace
-#     target_label: __address__
-#     regex: (.+)(?::\d+)
-#     replacement: $1:8444
+- job_name: 'kubernetes-controllers'
 
-# Scrape config for cAdvisor (for OCP 3.7).
+  scheme: https
+  tls_config:
+    ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+  bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+
+  kubernetes_sd_configs:
+  - role: endpoints
+
+  # Keep only the default/kubernetes service endpoints for the https port, and then
+  # set the port to 8444. This is the default configuration for the controllers on OpenShift
+  # masters.
+  relabel_configs:
+  - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+    action: keep
+    regex: default;kubernetes;https
+  - source_labels: [__address__]
+    action: replace
+    target_label: __address__
+    regex: (.+)(?::\d+)
+    replacement: $1:8444
+
+# Scrape config for cAdvisor.
 #
 # Beginning in Kube 1.7, each node exposes a /metrics/cadvisor endpoint that
 # reports container metrics for each running pod. Scrape those by default.
-# - job_name: 'kubernetes-cadvisor'
-#
-#   scheme: https
-#   tls_config:
-#     ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-#   bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-#
-#   metrics_path: /metrics/cadvisor
-#
-#   kubernetes_sd_configs:
-#   - role: node
-#
-#   relabel_configs:
-#   - action: labelmap
-#     regex: __meta_kubernetes_node_label_(.+)
+- job_name: 'kubernetes-cadvisor'
 
+  scheme: https
+  tls_config:
+    ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+  bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+
+  metrics_path: /metrics/cadvisor
+
+  kubernetes_sd_configs:
+  - role: node
+
+  relabel_configs:
+  - action: labelmap
+    regex: __meta_kubernetes_node_label_(.+)
 
 # Scrape config for service endpoints.
 #
@@ -160,6 +122,7 @@ scrape_configs:
 
   kubernetes_sd_configs:
   - role: endpoints
+
 
   relabel_configs:
   - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
@@ -194,3 +157,10 @@ scrape_configs:
   - source_labels: [__meta_kubernetes_service_name]
     action: replace
     target_label: kubernetes_name
+
+alerting:
+  alertmanagers:
+  - scheme: http
+    static_configs:
+    - targets:
+      - "localhost:9093"

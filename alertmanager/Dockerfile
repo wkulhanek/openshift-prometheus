@@ -1,7 +1,7 @@
 FROM docker.io/centos:7
 LABEL maintainer="Wolfgang Kulhanek <WolfgangKulhanek@gmail.com>"
 
-ENV ALERT_MANAGER_VERSION=0.13.0
+ENV ALERT_MANAGER_VERSION=0.14.0
 
 RUN yum -y update && yum -y upgrade  && \
     yum -y clean all && \

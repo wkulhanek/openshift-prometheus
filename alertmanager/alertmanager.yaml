@@ -11,7 +11,7 @@ metadata:
 parameters:
 - description: The location of the prometheus image
   name: IMAGE_ALERTMANAGER
-  value: wkulhanek/alertmanager:latest
+  value: wkulhanek/alertmanager:0.8.0
 - name: VOLUME_CAPACITY
   displayName: Volume Capacity
   description: Volume space available for data, e.g. 512Mi, 2Gi.

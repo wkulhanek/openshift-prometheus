@@ -11,7 +11,7 @@ metadata:
 parameters:
 - description: The location of the prometheus image
   name: IMAGE_NODE_EXPORTER
-  value: wkulhanek/node-exporter:0.14.0
+  value: wkulhanek/node-exporter:0.15.2
 objects:
 
 - apiVersion: extensions/v1beta1

@@ -1,7 +1,7 @@
 FROM  registry.access.redhat.com/rhel7-atomic:7.4
 LABEL maintainer="Wolfgang Kulhanek <WolfgangKulhanek@gmail.com>"
 
-ENV PROMETHEUS_VERSION=2.3.1
+ENV PROMETHEUS_VERSION=2.3.2
 
 RUN microdnf update && \
     microdnf install tar gzip --enablerepo=rhel-7-server-rpms && \

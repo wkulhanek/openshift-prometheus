@@ -1,7 +1,7 @@
 FROM docker.io/centos:7
 LABEL maintainer="Wolfgang Kulhanek <WolfgangKulhanek@gmail.com>"
 
-ENV PROMETHEUS_VERSION=2.3.2
+ENV PROMETHEUS_VERSION=2.4.3
 
 RUN yum -y update && yum -y upgrade  && \
     yum -y clean all && \

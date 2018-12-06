@@ -1,7 +1,7 @@
 FROM docker.io/centos:7
 LABEL maintainer="Wolfgang Kulhanek <WolfgangKulhanek@gmail.com>"
 
-ENV NODE_EXPORTER_VERSION=0.16.0
+ENV NODE_EXPORTER_VERSION=0.17.0
 
 RUN yum -y update && yum -y upgrade && yum clean all && \
     curl -L -o /tmp/node_exporter.tar.gz https://github.com/prometheus/node_exporter/releases/download/v$NODE_EXPORTER_VERSION/node_exporter-$NODE_EXPORTER_VERSION.linux-amd64.tar.gz && \

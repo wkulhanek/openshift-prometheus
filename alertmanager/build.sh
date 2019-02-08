@@ -1,5 +1,5 @@
 #!/bin/bash
-export VERSION=0.15.3
+export VERSION=0.16.1
 docker build . -t wkulhanek/alertmanager:latest
 docker tag wkulhanek/alertmanager:latest wkulhanek/alertmanager:${VERSION}
 docker push wkulhanek/alertmanager:latest

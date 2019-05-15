@@ -1,4 +1,6 @@
 #!/bin/sh
+
+# you should set securityContext privileged true on container part of node-exporter.yaml file to collect filesystem metrics!
 # Change into the Prometheus project
 oc project prometheus
 

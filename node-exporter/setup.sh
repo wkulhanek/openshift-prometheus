@@ -3,7 +3,9 @@
 oc project prometheus
 
 # The Service Account running the node selector pods needs the SCC `hostaccess`:
-oc adm policy add-scc-to-user privileged system:serviceaccount:prometheus:default
+
+# oc adm policy add-scc-to-user privileged system:serviceaccount:<NAMESPACE>:<PROJECT>
+oc adm policy add-scc-to-user privileged system:serviceaccount:prometheus:default 
 
 # Import the template and create the DaemonSet
 oc create -f node-exporter-template.yaml
